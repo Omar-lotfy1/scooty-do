@@ -114,19 +114,13 @@ export function Header({
           )}
         >
           <Link href="/" className="flex items-center gap-3 group">
-            <m.div 
-              whileHover={{ rotate: 5, scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-hp-soft border border-hp-border"
-            >
-              <img 
-                src="https://res.cloudinary.com/dxe7xgi2r/image/upload/v1779310566/WhatsApp_Image_2026-05-20_at_11.50.53_PM_wqtaxp.jpg" 
-                alt="Scooty DO Logo" 
-                className="h-full w-full object-cover"
-              />
-            </m.div>
-            <span className="font-marker text-2xl font-bold tracking-tight text-hp-foreground sm:text-3xl mt-1">
-              SCOOTY <span className="text-hp-primary">DO</span>
+            <img 
+              src="https://res.cloudinary.com/dxe7xgi2r/image/upload/v1779310566/WhatsApp_Image_2026-05-20_at_11.50.53_PM_wqtaxp.jpg" 
+              alt="Scooty DO Logo" 
+              className="h-16 w-16 object-cover"
+            />
+            <span className="font-display text-xl font-bold tracking-tight text-hp-foreground sm:text-2xl">
+              Scooty <span className="text-hp-primary">DO</span>
             </span>
           </Link>
 

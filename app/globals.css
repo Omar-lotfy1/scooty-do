@@ -173,7 +173,6 @@
   --shadow-hp-glow: 0 18px 38px -18px rgba(255, 107, 0, 0.35);
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-arabic: var(--font-arabic), 'Cairo', system-ui, sans-serif;
-  --font-marker: var(--font-marker), 'Permanent Marker', cursive;
 }
 
 html.font-arabic {

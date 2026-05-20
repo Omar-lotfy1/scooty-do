@@ -45,7 +45,8 @@ export function HeroSection({
       <HpContainer className="relative grid items-center gap-14 pb-24 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28">
         <Reveal className="relative z-10">
           <h1 className="mt-0 max-w-3xl font-display text-5xl font-bold tracking-tight text-hp-foreground sm:text-6xl lg:text-7xl xl:text-[5.5rem] xl:leading-[0.95]">
-            {title} <span className="text-hp-primary">{hero.accent}</span>
+            <span className="block">Scooty <span className="text-hp-primary">DO</span></span>
+            <span className="block">Ride. Move. <span className="text-hp-primary">DO</span></span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-hp-muted lg:text-xl">{description}</p>
 
