@@ -125,8 +125,8 @@ export function Header({
                 className="h-full w-full object-cover"
               />
             </m.div>
-            <span className="font-display text-xl font-bold tracking-tight text-hp-foreground sm:text-2xl">
-              Scooty <span className="text-hp-primary">DO</span>
+            <span className="font-marker text-2xl font-bold tracking-tight text-hp-foreground sm:text-3xl mt-1">
+              SCOOTY <span className="text-hp-primary">DO</span>
             </span>
           </Link>
 

@@ -1,4 +1,4 @@
-import { Inter, Space_Grotesk, Cairo } from 'next/font/google'
+import { Inter, Space_Grotesk, Cairo, Permanent_Marker } from 'next/font/google'
 import '@/app/globals.css'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
@@ -20,6 +20,12 @@ const spaceGrotesk = Space_Grotesk({
   display: 'swap',
 })
 const cairo = Cairo({ subsets: ['arabic'], variable: '--font-arabic', display: 'swap' })
+const permanentMarker = Permanent_Marker({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-marker',
+  display: 'swap',
+})
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -73,7 +79,7 @@ export default async function LocaleLayout({
       lang={locale}
       dir={dir}
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${cairo.variable} ${locale === 'ar' ? 'font-arabic' : ''}`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${cairo.variable} ${permanentMarker.variable} ${locale === 'ar' ? 'font-arabic' : ''}`}
     >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
