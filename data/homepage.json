@@ -1,0 +1,266 @@
+{
+  "seo": {
+    "title": "Scooty DO — Smart Electric Scooters for Urban Mobility",
+    "description": "Explore Scooty DO electric scooters built for fast, stylish, and eco-friendly urban commuting. Discover powerful performance, sleek design, and city-ready convenience.",
+    "keywords": [
+      "electric scooter",
+      "urban mobility",
+      "city commuting",
+      "eco-friendly transportation",
+      "Mi scooter pro 2",
+      "Scooty DO"
+    ],
+    "canonical": "https://scootydo.com/",
+    "openGraphImage": "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=800&auto=format&fit=crop"
+  },
+  "navigation": {
+    "announcement": "188 scooters in stock • Fast city delivery • Admin-ready content architecture",
+    "links": [
+      { "label": "Models", "href": "#products" },
+      { "label": "Features", "href": "#features" },
+      { "label": "Reviews", "href": "#testimonials" },
+      { "label": "Contact", "href": "#footer" }
+    ],
+    "primaryCta": { "label": "Shop Now", "href": "#products" }
+  },
+  "hero": {
+    "eyebrow": "Modern electric mobility for ambitious city riders",
+    "title": "Move smarter.",
+    "accent": "Ride brighter.",
+    "description": "Scooty DO delivers fast, foldable, stylish electric scooters designed for students, commuters, delivery riders, and anyone who wants a premium city ride without fuel costs.",
+    "primaryCta": { "label": "Explore the fleet", "href": "#products" },
+    "secondaryCta": { "label": "See how it works", "href": "#features" },
+    "stats": [
+      { "value": "45 km", "label": "Range per charge" },
+      { "value": "100 KG", "label": "Supported payload" },
+      { "value": "188", "label": "Scooters in stock" }
+    ],
+    "image": {
+      "src": "/images/scooter-3.png",
+      "alt": "Scooty DO premium electric scooter",
+      "width": 960,
+      "height": 960
+    },
+    "floatingCards": [
+      {
+        "title": "Long battery life",
+        "description": "Reliable power for daily city routes and multiple short trips.",
+        "icon": "battery"
+      },
+      {
+        "title": "Foldable design",
+        "description": "Portable enough for apartments, offices, and public transit transitions.",
+        "icon": "fold"
+      }
+    ]
+  },
+  "trustStrip": [
+    { "label": "Eco-friendly ride", "value": "Zero fuel costs", "icon": "leaf" },
+    { "label": "Daily commute ready", "value": "Fast urban travel", "icon": "route" },
+    { "label": "Safety first", "value": "Stable braking system", "icon": "shield" },
+    { "label": "Premium design", "value": "Sporty futuristic style", "icon": "sparkles" }
+  ],
+  "features": {
+    "eyebrow": "Why riders choose Scooty DO",
+    "title": "Built for speed, comfort, and everyday city convenience",
+    "description": "Every model is designed around practical performance: long battery life, durable body construction, safe handling, and a lightweight structure that fits modern urban living.",
+    "items": [
+      {
+        "title": "High-speed urban performance",
+        "description": "Fast and smooth acceleration helps riders save time on short-distance city travel.",
+        "stat": "Quick city mobility",
+        "icon": "zap"
+      },
+      {
+        "title": "Long-lasting battery",
+        "description": "Ride longer with dependable battery efficiency designed for daily commuting.",
+        "stat": "Extended ride range",
+        "icon": "battery"
+      },
+      {
+        "title": "Lightweight foldable frame",
+        "description": "Carry it easily upstairs, into apartments, classrooms, elevators, or office spaces.",
+        "stat": "Portable design",
+        "icon": "fold"
+      },
+      {
+        "title": "Durable body design",
+        "description": "Strong construction supports up to 100 KG while staying sleek and modern.",
+        "stat": "100 KG support",
+        "icon": "shield"
+      },
+      {
+        "title": "Safe stable braking",
+        "description": "Reliable control creates confidence for new riders and experienced commuters alike.",
+        "stat": "Confidence in traffic",
+        "icon": "brake"
+      },
+      {
+        "title": "Modern sporty aesthetic",
+        "description": "Premium lines, futuristic detailing, and standout product styling for lifestyle buyers.",
+        "stat": "Trend-forward design",
+        "icon": "sparkles"
+      }
+    ]
+  },
+  "products": {
+    "eyebrow": "Dynamic product showcase",
+    "title": "Choose the scooter that fits your city lifestyle",
+    "description": "Structured for easy future CMS updates: prices, stock, images, specs, and calls to action can all be changed without editing components.",
+    "filters": ["All Models", "Commuter", "Performance", "Portable"],
+    "items": [
+      {
+        "id": "mi-scooter-pro-2",
+        "name": "Mi Scooter Pro 2",
+        "category": "Performance",
+        "price": 18800,
+        "stock": 97,
+        "tagline": "Flagship performance for power riders and modern commuters.",
+        "image": {
+          "src": "/images/scooter-3.png",
+          "alt": "Mi Scooter Pro 2",
+          "width": 900,
+          "height": 900
+        },
+        "specs": [
+          { "label": "Speed", "value": "25 km/h" },
+          { "label": "Battery", "value": "Long-range" },
+          { "label": "Use Case", "value": "Daily city travel" }
+        ],
+        "primaryCta": { "label": "Reserve Pro 2", "href": "#cta" }
+      },
+      {
+        "id": "mi-electric-scooter-pro",
+        "name": "Mi Electric Scooter Pro",
+        "category": "Performance",
+        "price": 15800,
+        "stock": 5,
+        "tagline": "Premium performance with limited availability.",
+        "image": {
+          "src": "/images/scooter-2.png",
+          "alt": "Mi Electric Scooter Pro",
+          "width": 900,
+          "height": 900
+        },
+        "specs": [
+          { "label": "Stock", "value": "Only 5 left" },
+          { "label": "Design", "value": "Sporty premium" },
+          { "label": "Audience", "value": "Tech-first riders" }
+        ],
+        "primaryCta": { "label": "Claim limited stock", "href": "#cta" }
+      },
+      {
+        "id": "mi-scooter-1s",
+        "name": "Mi Scooter 1S",
+        "category": "Commuter",
+        "price": 13800,
+        "stock": 106,
+        "tagline": "Balanced value, comfort, and convenience for daily rides.",
+        "image": {
+          "src": "/images/scooter-1.png",
+          "alt": "Mi Scooter 1S",
+          "width": 900,
+          "height": 900
+        },
+        "specs": [
+          { "label": "Portability", "value": "Easy to carry" },
+          { "label": "Ride Feel", "value": "Smooth & stable" },
+          { "label": "Best For", "value": "Students & employees" }
+        ],
+        "primaryCta": { "label": "See commuter model", "href": "#cta" }
+      },
+      {
+        "id": "mi-scooter-essential",
+        "name": "Mi Scooter Essential",
+        "category": "Portable",
+        "price": 11600,
+        "stock": 8,
+        "tagline": "Lightweight entry model for effortless everyday city use.",
+        "image": {
+          "src": "/images/scooter-4.png",
+          "alt": "Mi Scooter Essential",
+          "width": 900,
+          "height": 900
+        },
+        "specs": [
+          { "label": "Weight", "value": "Lightweight" },
+          { "label": "Frame", "value": "Foldable" },
+          { "label": "Best For", "value": "Short trips" }
+        ],
+        "primaryCta": { "label": "Choose essential", "href": "#cta" }
+      }
+    ],
+    "inventoryHighlight": {
+      "eyebrow": "Inventory snapshot",
+      "title": "188 total scooters ready for immediate dispatch",
+      "description": "Use this section later for dynamic inventory sync from Firebase, Supabase, or MongoDB. Perfect for scarcity, flash sales, and restock campaigns.",
+      "cta": { "label": "Request bulk pricing", "href": "#cta" },
+      "image": {
+        "src": "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=800&auto=format&fit=crop",
+        "alt": "Scooty DO product lineup",
+        "width": 900,
+        "height": 900
+      }
+    }
+  },
+  "testimonials": {
+    "eyebrow": "Dynamic testimonials",
+    "title": "Trusted by students, commuters, and fast-moving city riders",
+    "description": "These reviews are structured to be editable from a future dashboard with names, quotes, roles, and highlight tags.",
+    "items": [
+      {
+        "quote": "Scooty DO made my daily commute way faster. It feels premium, saves me money, and folds easily when I get to campus.",
+        "name": "Ava Rahman",
+        "role": "University Student",
+        "highlight": "Saves time every day"
+      },
+      {
+        "quote": "I needed a stylish but practical scooter for office travel. The ride feels stable, the battery lasts, and the design always gets attention.",
+        "name": "Marcus Lee",
+        "role": "Urban Professional",
+        "highlight": "Premium look and feel"
+      },
+      {
+        "quote": "For short delivery routes and quick errands, this is a huge upgrade from spending on fuel. Smooth, fast, and easy to use.",
+        "name": "Nadia Karim",
+        "role": "City Delivery Rider",
+        "highlight": "Cuts operating costs"
+      }
+    ]
+  },
+  "ctas": [
+    {
+      "id": "cta-primary",
+      "variant": "split",
+      "eyebrow": "Conversion-ready CTA",
+      "title": "Book a test ride or reserve your scooter today",
+      "description": "Drive stronger conversion with urgency, reassurance, and high-clarity actions. This block is ready for future form, CRM, or admin integration.",
+      "primaryCta": { "label": "Reserve now", "href": "#footer" },
+      "secondaryCta": { "label": "Talk to sales", "href": "#footer" },
+      "image": {
+        "src": "/images/featured-scooter.png",
+        "alt": "Scooty DO featured scooter",
+        "width": 900,
+        "height": 900
+      },
+      "bullets": [
+        "Fast response from product team",
+        "Flexible options for personal or bulk orders",
+        "Ideal for riders, campuses, and delivery teams"
+      ]
+    },
+    {
+      "id": "cta-newsletter",
+      "variant": "centered",
+      "eyebrow": "Retention CTA",
+      "title": "Get launch alerts, offers, and stock updates",
+      "description": "Perfect for email capture, waitlists, and promo campaigns. This content object can later connect to your admin dashboard or CRM automation.",
+      "primaryCta": { "label": "Join the list", "href": "#footer" },
+      "bullets": [
+        "Early access to new models",
+        "Exclusive commuter offers",
+        "Restock notifications"
+      ]
+    }
+  ]
+}

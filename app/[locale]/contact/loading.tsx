@@ -1,0 +1,9 @@
+import { Loader2 } from 'lucide-react'
+
+export default function ContactLoading() {
+  return (
+    <div className="flex min-h-[50vh] flex-col items-center justify-center">
+      <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
+    </div>
+  )
+}

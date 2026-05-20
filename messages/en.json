@@ -1,0 +1,139 @@
+{
+  "Index": {
+    "title": "Welcome to Scooty Do",
+    "description": "Premium Electric Scooters for the Urban Commuter"
+  },
+  "Navigation": {
+    "home": "Home",
+    "shop": "Shop",
+    "contact": "Contact",
+    "models": "Models",
+    "features": "Features",
+    "reviews": "Reviews",
+    "shopNow": "Shop Now"
+  },
+  "Hero": {
+    "eyebrow": "Modern electric mobility for ambitious city riders",
+    "title": "Move smarter.",
+    "accent": "Ride brighter.",
+    "description": "Scooty DO delivers fast, foldable, stylish electric scooters designed for students, commuters, delivery riders, and anyone who wants a premium city ride without fuel costs.",
+    "primaryCta": "Explore the fleet",
+    "secondaryCta": "See how it works",
+    "statRange": "Range per charge",
+    "statPayload": "Supported payload",
+    "statStock": "Scooters in stock"
+  },
+  "Products": {
+    "eyebrow": "Our models",
+    "title": "Choose the scooter that fits you",
+    "description": "From lightweight daily commuters to powerful long-range models — every scooter is built for performance and comfort on city streets.",
+    "reserveNow": "View Scooter",
+    "viewMoreModels": "View more models",
+    "orderWhatsApp": "Order on WhatsApp",
+    "inStock": "In Stock",
+    "limitedStock": "Limited Stock",
+    "almostGone": "Almost Gone",
+    "speed": "Speed",
+    "battery": "Battery",
+    "range": "Range"
+  },
+  "Shop": {
+    "title": "Shop",
+    "filters": "Filters",
+    "allModels": "All Models",
+    "buyNow": "Buy Now",
+    "orderViaWhatsApp": "Order via WhatsApp",
+    "specs": "Specifications",
+    "overview": "Overview",
+    "deliveryWarranty": "Delivery & Warranty",
+    "warrantyText": "1 Year Warranty on battery and motor.",
+    "deliveryText": "Fast Delivery within 48 hours.",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "price": "Price",
+    "currency": "EGP",
+    "inStockOnly": "In Stock Only",
+    "sortBy": "Sort by",
+    "featured": "Featured",
+    "newest": "Newest Arrivals",
+    "priceLowHigh": "Price: Low to High",
+    "priceHighLow": "Price: High to Low",
+    "noProducts": "No Scooters Found",
+    "noProductsDesc": "We couldn't find any products matching your current filters. Try adjusting your search criteria.",
+    "catAll": "All Models",
+    "catCommuter": "Commuter",
+    "catPerformance": "Performance",
+    "catPortable": "Portable"
+  },
+  "Contact": {
+    "title": "Contact Us",
+    "subtitle": "Have a question or need support? We're here to help.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone (Optional)",
+    "message": "Your message",
+    "submit": "Send Message",
+    "sending": "Sending...",
+    "success": "Your message was sent — we'll get back to you soon!",
+    "error": "Something went wrong, please try again",
+    "emailUs": "Email Us",
+    "emailUsDesc": "Our friendly team is here to help.",
+    "callUs": "Call Us",
+    "callUsDesc": "Mon-Fri from 8am to 5pm.",
+    "successTitle": "Message Sent!",
+    "successDesc": "We have received your message and will get back to you shortly.",
+    "sendAnother": "Send another message"
+  },
+  "ExperienceHubs": {
+    "title": "Experience Centers",
+    "subtitle": "Visit our physical flagship hubs to test drive, consult with experts, or pick up your premium electric scooter.",
+    "cairoName": "Cairo Flagship Hub",
+    "cairoDesc": "In the heart of Heliopolis. Dynamic showroom, test drive track, and fully certified service workshop.",
+    "cairoHours": "Everyday: 10:00 AM - 9:00 PM",
+    "alexName": "Alexandria Coastal Hub",
+    "alexDesc": "Overlooking Stanley bridge. Experience center, accessories vault, and immediate delivery hub.",
+    "alexHours": "Everyday: 10:00 AM - 9:00 PM",
+    "openNow": "Open Now",
+    "closed": "Closed",
+    "getDirections": "Get Directions",
+    "scheduleTestDrive": "Schedule a Test Drive"
+  },
+  "ContactFAQ": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Got questions? We've got answers. Quick insights before you get in touch.",
+    "q1": "Can I take a test drive before purchasing?",
+    "a1": "Absolutely! We highly encourage test drives. Visit our Cairo or Alexandria Experience Centers to test drive any of our models on a dedicated safe track with a certified specialist.",
+    "q2": "What is the battery and motor warranty policy?",
+    "a2": "Every Scooty Do scooter comes with a 1-year comprehensive warranty covering the battery pack, smart BMS, high-efficiency motor, and primary frame structure. Extended warranty plans are available at checkout.",
+    "q3": "How long does shipping take and what is the cost?",
+    "a3": "We offer premium home delivery within 24 to 48 hours anywhere in Egypt. Self-pickup is also available instantly from our Cairo Flagship Hub or Alexandria Coastal Hub once your order is confirmed.",
+    "q4": "Do you provide home maintenance services?",
+    "a4": "Yes, we do! For minor servicing, tire replacements, or electronic tune-ups, you can schedule a home-service visit from one of our mobile service engineers, or drop by our showroom workshops anytime."
+  },
+  "NotFound": {
+    "title": "Not Found",
+    "description": "This scooter couldn't be found.",
+    "back": "Back to Shop"
+  },
+  "Footer": {
+    "rights": "All rights reserved",
+    "tagline": "Smart city mobility — no fuel, no fuss"
+  },
+  "EnvironmentalImpact": {
+    "eyebrow": "Our Planet, Our Future",
+    "title1": "Zero Emissions.",
+    "title2": "100% Freedom.",
+    "description": "By choosing electric mobility over gas-powered vehicles, our community of riders has made a measurable impact on urban air quality and noise pollution. We believe the fastest way through the city should also be the cleanest.",
+    "stat1Label": "Tons of CO2 Saved",
+    "stat2Label": "Avg Annual Gas Savings",
+    "stat3Label": "Clean Miles Ridden",
+    "stat4Title": "100% Electric",
+    "stat4Desc": "Zero oil changes, zero emissions, and silent operation."
+  },
+  "LifestyleGallery": {
+    "eyebrow": "Join the Movement",
+    "title": "The City is Yours",
+    "description": "Skip the traffic, feel the breeze, and experience a better way to move through your day.",
+    "riderAlt": "Scooty DO lifestyle rider"
+  }
+}

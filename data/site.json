@@ -1,0 +1,55 @@
+{
+  "siteName": "Scooty DO",
+  "siteUrl": "https://scootydo.com",
+  "defaultLocale": "en",
+  "brandTagline": "Smart electric mobility for modern cities.",
+  "footer": {
+    "description": "Scooty DO builds stylish, high-performance electric scooters for students, commuters, riders, and modern city life.",
+    "newsletterTitle": "Stay charged with Scooty DO",
+    "newsletterDescription": "Get product drops, stock alerts, commuter tips, and launch updates directly in your inbox.",
+    "footerColumns": [
+      {
+        "title": "Products",
+        "links": [
+          { "label": "Mi Scooter Pro 2", "href": "#products" },
+          { "label": "Mi Electric Scooter Pro", "href": "#products" },
+          { "label": "Mi Scooter 1S", "href": "#products" },
+          { "label": "Mi Scooter Essential", "href": "#products" }
+        ]
+      },
+      {
+        "title": "Company",
+        "links": [
+          { "label": "About Scooty DO", "href": "#about" },
+          { "label": "Technology", "href": "#features" },
+          { "label": "Testimonials", "href": "#testimonials" },
+          { "label": "Contact", "href": "#footer" }
+        ]
+      },
+      {
+        "title": "Support",
+        "links": [
+          { "label": "Warranty", "href": "#cta" },
+          { "label": "Delivery", "href": "#cta" },
+          { "label": "Bulk Orders", "href": "#cta" },
+          { "label": "Help Center", "href": "#footer" }
+        ]
+      }
+    ],
+    "contact": {
+      "phone": "+1 (800) 726-6893",
+      "email": "hello@scootydo.com",
+      "address": "City Center Mobility Hub, Urban Plaza, Smart District"
+    },
+    "socialLinks": [
+      { "label": "Instagram", "href": "https://instagram.com" },
+      { "label": "TikTok", "href": "https://tiktok.com" },
+      { "label": "Facebook", "href": "https://facebook.com" }
+    ],
+    "legalLinks": [
+      { "label": "Privacy Policy", "href": "#" },
+      { "label": "Terms of Service", "href": "#" },
+      { "label": "Cookies", "href": "#" }
+    ]
+  }
+}
