@@ -115,7 +115,7 @@ export function Header({
         >
           <Link href="/" className="flex items-center gap-3 group">
             <img 
-              src="https://res.cloudinary.com/dxe7xgi2r/image/upload/v1779310566/WhatsApp_Image_2026-05-20_at_11.50.53_PM_wqtaxp.jpg" 
+              src="https://res.cloudinary.com/dxe7xgi2r/image/upload/v1779312650/WhatsApp_Image_2026-05-20_at_11.50.53_PM-removebg-preview_edbsxn.png" 
               alt="Scooty DO Logo" 
               className="h-16 w-16 object-cover"
             />
