@@ -40,15 +40,7 @@ export function ProductGridSection({ content }: ProductGridSectionProps) {
                   <h3 className="mt-4 text-2xl font-semibold text-hp-foreground">{item.name}</h3>
                   <p className="mt-3 max-w-md text-base leading-7 text-hp-muted">{item.tagline}</p>
                 </div>
-                {item.stock <= 10 ? (
-                  <span className="rounded-full bg-hp-primary/10 px-3 py-1 text-xs font-semibold text-hp-primary">
-                    Only {item.stock} left
-                  </span>
-                ) : (
-                  <span className="rounded-full bg-hp-surface px-3 py-1 text-xs font-semibold text-hp-muted">
-                    {item.stock} in stock
-                  </span>
-                )}
+
               </div>
 
               <div className="mt-6 grid items-center gap-6 md:grid-cols-[1fr_0.9fr]">
