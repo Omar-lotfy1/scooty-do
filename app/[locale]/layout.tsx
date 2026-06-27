@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { Outfit, Plus_Jakarta_Sans, Tajawal } from 'next/font/google'
 import '@/app/globals.css'
 import { NextIntlClientProvider } from 'next-intl'
@@ -30,6 +31,40 @@ const tajawal = Tajawal({
   weight: ['300', '400', '500', '700', '800', '900'],
   display: 'swap',
 })
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const otherLocale = locale === 'ar' ? 'en' : 'ar'
+  const baseUrl = 'https://www.scootydo.online'
+
+  return {
+    metadataBase: new URL(baseUrl),
+    title: {
+      default: 'Scooty Do — Electric Scooters in Egypt | سكوتر كهربائي في مصر',
+      template: '%s | Scooty Do',
+    },
+    description: 'Premier supplier of high-performance electric scooters in Egypt. Fast delivery and localized warranty. | أفضل سكوترات كهربائية في مصر.',
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+        'max-video-preview': -1,
+      },
+    },
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: {
+        [locale]: `${baseUrl}/${locale}`,
+        [otherLocale]: `${baseUrl}/${otherLocale}`,
+        'x-default': `${baseUrl}/en`,
+      },
+    },
+  }
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
