@@ -38,7 +38,7 @@ export function ProductGridSection({ content }: ProductGridSectionProps) {
                     {item.category}
                   </span>
                   <h3 className="mt-4 text-2xl font-semibold text-hp-foreground">{item.name}</h3>
-                  <p className="mt-3 max-w-md text-base leading-7 text-hp-muted">{item.tagline}</p>
+                  <p className="mt-3 max-w-md text-base leading-7 text-hp-muted line-clamp-2">{item.tagline}</p>
                 </div>
 
               </div>

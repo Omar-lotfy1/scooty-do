@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Menu, X, Zap } from 'lucide-react';
+import { Menu, X, Zap, Truck, ShieldCheck, Star } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
@@ -11,6 +11,38 @@ export interface HeaderAnnouncementProps {
   announcementVisible?: boolean;
   announcementText?: string;
   announcementBg?: 'orange' | 'black';
+  tickerSegment2?: string;
+  tickerSegment3?: string;
+  tickerSegment4?: string;
+}
+
+/** Divider dot between ticker segments */
+function TickerDot({ dark }: { dark?: boolean }) {
+  return (
+    <span
+      className="mx-6 inline-block h-1 w-1 rounded-full shrink-0 opacity-60"
+      style={{ background: dark ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.5)' }}
+      aria-hidden="true"
+    />
+  );
+}
+
+/** A single announcement ticker segment */
+function TickerSegment({
+  icon: Icon,
+  text,
+  dark,
+}: {
+  icon: React.ElementType;
+  text: string;
+  dark?: boolean;
+}) {
+  return (
+    <span className="inline-flex items-center gap-2 shrink-0">
+      <Icon size={13} strokeWidth={2.2} className="opacity-80" />
+      <span className="tracking-wide">{text}</span>
+    </span>
+  );
 }
 
 const navLinks = [
@@ -23,6 +55,9 @@ export function Header({
   announcementVisible = false,
   announcementText = '',
   announcementBg = 'orange',
+  tickerSegment2 = 'Fast Cairo & Alexandria Delivery',
+  tickerSegment3 = '1-Year Warranty on All Models',
+  tickerSegment4 = '188 Scooters In Stock — Order Today',
 }: HeaderAnnouncementProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -80,23 +115,110 @@ export function Header({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
             className={cn(
-              'relative overflow-hidden border-b text-center text-xs font-medium',
+              'relative overflow-hidden text-xs font-semibold',
               announcementBg === 'orange'
-                ? 'border-hp-primary/20 bg-hp-primary text-white'
-                : 'border-white/10 bg-hp-contrast text-white'
+                ? 'text-white'
+                : 'text-white'
             )}
+            style={{
+              height: '48px',
+              background: announcementBg === 'orange'
+                ? 'linear-gradient(135deg, #ff6200 0%, #ff7a1a 50%, #ff6b00 100%)'
+                : '#0f0f0f',
+              borderBottom: announcementBg === 'orange'
+                ? '1px solid rgba(255,120,20,0.4)'
+                : '1px solid rgba(255,255,255,0.08)',
+              boxShadow: announcementBg === 'orange'
+                ? '0 1px 0 rgba(255,160,80,0.25) inset, 0 2px 12px rgba(255,107,0,0.2)'
+                : '0 1px 0 rgba(255,255,255,0.04) inset',
+            }}
           >
-            <div className="mx-auto flex w-full max-w-7xl items-center justify-center px-10 py-2 sm:px-6 lg:px-8">
-              {announcementText}
-              <button 
-                onClick={() => setDismissed(true)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-1 transition-colors hover:bg-white/20 rtl:left-4 rtl:right-auto"
-                aria-label="Dismiss announcement"
+            {/* Inner top highlight line for glass feel */}
+            <div
+              className="pointer-events-none absolute top-0 left-0 right-0 h-px"
+              style={{
+                background: announcementBg === 'orange'
+                  ? 'linear-gradient(90deg, transparent 0%, rgba(255,200,120,0.6) 50%, transparent 100%)'
+                  : 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
+              }}
+              aria-hidden="true"
+            />
+
+            {/* Left edge fade */}
+            <div
+              className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20"
+              style={{
+                background: announcementBg === 'orange'
+                  ? 'linear-gradient(90deg, #ff6200 0%, transparent 100%)'
+                  : 'linear-gradient(90deg, #0f0f0f 0%, transparent 100%)',
+              }}
+              aria-hidden="true"
+            />
+            {/* Right edge fade + dismiss zone */}
+            <div
+              className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20"
+              style={{
+                background: announcementBg === 'orange'
+                  ? 'linear-gradient(270deg, #ff6b00 0%, transparent 100%)'
+                  : 'linear-gradient(270deg, #0f0f0f 0%, transparent 100%)',
+              }}
+              aria-hidden="true"
+            />
+
+            {/* Scrolling ticker */}
+            <div className="flex h-full items-center overflow-hidden px-14">
+              <div
+                className="flex items-center whitespace-nowrap"
+                style={{ animation: 'ticker-scroll 32s linear infinite' }}
               >
-                <X size={14} />
-              </button>
+                {[0, 1].map((pass) => (
+                  <span key={pass} className="inline-flex items-center">
+                    <TickerSegment
+                      icon={Zap}
+                      text={announcementText}
+                      dark={announcementBg !== 'orange'}
+                    />
+                    <TickerDot dark={announcementBg !== 'orange'} />
+                    <TickerSegment
+                      icon={Truck}
+                      text={tickerSegment2}
+                      dark={announcementBg !== 'orange'}
+                    />
+                    <TickerDot dark={announcementBg !== 'orange'} />
+                    <TickerSegment
+                      icon={ShieldCheck}
+                      text={tickerSegment3}
+                      dark={announcementBg !== 'orange'}
+                    />
+                    <TickerDot dark={announcementBg !== 'orange'} />
+                    <TickerSegment
+                      icon={Star}
+                      text={tickerSegment4}
+                      dark={announcementBg !== 'orange'}
+                    />
+                    <span className="inline-block w-28 shrink-0" aria-hidden="true" />
+                  </span>
+                ))}
+              </div>
             </div>
+
+            {/* Dismiss button */}
+            <button
+              onClick={() => setDismissed(true)}
+              className="absolute right-3 top-1/2 z-20 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all hover:bg-white/30 hover:scale-110 rtl:left-3 rtl:right-auto"
+              aria-label="Dismiss announcement"
+            >
+              <X size={12} strokeWidth={2.5} />
+            </button>
+
+            <style>{`
+              @keyframes ticker-scroll {
+                0%   { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+              }
+            `}</style>
           </m.div>
         )}
       </AnimatePresence>

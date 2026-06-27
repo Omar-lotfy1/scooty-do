@@ -19,20 +19,51 @@ import {
   LogOut,
   Zap,
   Languages,
+  ChevronRight,
+  Globe,
 } from 'lucide-react'
 import { useAdminLang } from '@/lib/admin-lang'
 import { adminLabel, type AdminLabelKey } from '@/lib/admin-labels'
+import { Outfit, Plus_Jakarta_Sans } from 'next/font/google'
 
-const NAV_LINKS: { href: string; labelKey: AdminLabelKey; icon: typeof LayoutDashboard }[] = [
-  { href: '/admin/dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
-  { href: '/admin/products', labelKey: 'products', icon: Package },
-  { href: '/admin/homepage', labelKey: 'homepageEditor', icon: Home },
-  { href: '/admin/whatsapp', labelKey: 'whatsappSettings', icon: MessageCircle },
-  { href: '/admin/announcement', labelKey: 'announcementBar', icon: Megaphone },
-  { href: '/admin/media', labelKey: 'mediaLibrary', icon: Image },
-  { href: '/admin/cta-image', labelKey: 'ctaImage', icon: Image },
-  { href: '/admin/lifestyle', labelKey: 'lifestyleGallery', icon: Image },
-  { href: '/admin/seo', labelKey: 'seoSettings', icon: Search },
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  weight: ['300', '400', '500', '600', '700', '800'],
+  display: 'swap',
+})
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+})
+
+const NAV_GROUPS = [
+  {
+    label: 'Content',
+    links: [
+      { href: '/admin/dashboard',   labelKey: 'dashboard'      as AdminLabelKey, icon: LayoutDashboard },
+      { href: '/admin/products',    labelKey: 'products'       as AdminLabelKey, icon: Package },
+      { href: '/admin/homepage',    labelKey: 'homepageEditor' as AdminLabelKey, icon: Home },
+    ],
+  },
+  {
+    label: 'Marketing',
+    links: [
+      { href: '/admin/announcement', labelKey: 'announcementBar'   as AdminLabelKey, icon: Megaphone },
+      { href: '/admin/whatsapp',     labelKey: 'whatsappSettings'  as AdminLabelKey, icon: MessageCircle },
+      { href: '/admin/cta-image',    labelKey: 'ctaImage'          as AdminLabelKey, icon: Image },
+      { href: '/admin/lifestyle',    labelKey: 'lifestyleGallery'  as AdminLabelKey, icon: Image },
+    ],
+  },
+  {
+    label: 'Settings',
+    links: [
+      { href: '/admin/media', labelKey: 'mediaLibrary' as AdminLabelKey, icon: Image },
+      { href: '/admin/seo',   labelKey: 'seoSettings'  as AdminLabelKey, icon: Search },
+    ],
+  },
 ]
 
 export default function AdminShell({
@@ -49,12 +80,12 @@ export default function AdminShell({
   const [mobileOpen, setMobileOpen] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
 
+  const allLinks = NAV_GROUPS.flatMap((g) => g.links)
   const pageTitle =
-    NAV_LINKS.find((link) => link.href === pathname)?.labelKey
-      ? l(NAV_LINKS.find((link) => link.href === pathname)!.labelKey)
+    allLinks.find((link) => link.href === pathname)?.labelKey
+      ? l(allLinks.find((link) => link.href === pathname)!.labelKey)
       : 'Admin Panel'
 
-  // Close mobile sidebar on route change
   useEffect(() => {
     setMobileOpen(false)
   }, [pathname])
@@ -66,49 +97,129 @@ export default function AdminShell({
     router.push('/admin/login')
   }
 
+  const userInitial = email?.[0]?.toUpperCase() ?? 'A'
+
   const SidebarContent = () => (
     <div className="flex h-full flex-col">
-      {/* Brand */}
-      <div className="flex items-center gap-2 border-b border-white/10 px-6 py-5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500">
-          <Zap className="h-4 w-4 text-white" />
+      {/* ── Brand ── */}
+      <div className="flex items-center gap-3 px-5 py-6">
+        <div className="relative">
+          <div
+            className="absolute inset-0 rounded-xl opacity-50 blur-md"
+            style={{ background: '#ff6b00' }}
+          />
+          <div
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl"
+            style={{ background: 'linear-gradient(135deg, #ff6b00 0%, #ff8a33 100%)' }}
+          >
+            <Zap className="h-4 w-4 text-white" strokeWidth={2.5} />
+          </div>
         </div>
-        <span className="text-xl font-black tracking-tight text-orange-500">Scooty Do</span>
+        <div>
+          <span
+            className="block text-lg font-bold leading-none tracking-tight text-white"
+            style={{ fontFamily: 'var(--font-display, Outfit, sans-serif)' }}
+          >
+            Scooty <span style={{ color: '#ff6b00' }}>DO</span>
+          </span>
+          <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-500">
+            Admin Panel
+          </span>
+        </div>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 overflow-y-auto p-3">
-        <div className="space-y-1">
-          {NAV_LINKS.map(({ href, labelKey, icon: Icon }) => {
-            const active = pathname === href
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-150 ${
-                  active
-                    ? 'border-l-2 border-orange-500 bg-orange-500/10 text-orange-500'
-                    : 'border-l-2 border-transparent text-zinc-400 hover:bg-white/5 hover:text-white'
-                }`}
-              >
-                <Icon className="h-4 w-4 shrink-0" />
-                {l(labelKey)}
-              </Link>
-            )
-          })}
-        </div>
+      {/* ── Divider ── */}
+      <div className="mx-4 mb-4 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
+
+      {/* ── Nav ── */}
+      <nav className="flex-1 overflow-y-auto px-3 pb-4">
+        {NAV_GROUPS.map((group) => (
+          <div key={group.label} className="mb-5">
+            <p className="mb-1.5 px-3 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
+              {group.label}
+            </p>
+            <div className="space-y-0.5">
+              {group.links.map(({ href, labelKey, icon: Icon }) => {
+                const active = pathname === href
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150"
+                    style={{
+                      background: active ? 'rgba(255,107,0,0.12)' : 'transparent',
+                      color: active ? '#ff6b00' : 'rgb(161,161,170)',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!active) {
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
+                        e.currentTarget.style.color = '#fff'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!active) {
+                        e.currentTarget.style.background = 'transparent'
+                        e.currentTarget.style.color = 'rgb(161,161,170)'
+                      }
+                    }}
+                  >
+                    {/* Active indicator */}
+                    {active && (
+                      <span
+                        className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full"
+                        style={{ background: '#ff6b00' }}
+                      />
+                    )}
+                    <Icon
+                      className="h-4 w-4 shrink-0"
+                      strokeWidth={active ? 2.2 : 1.8}
+                    />
+                    <span className="flex-1">{l(labelKey)}</span>
+                    {active && (
+                      <ChevronRight className="h-3 w-3 opacity-60" strokeWidth={2} />
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
-      {/* Footer */}
-      <div className="border-t border-white/10 p-4">
-        <div className="rounded-xl bg-white/5 p-3">
-          <p className="truncate text-xs text-zinc-400">{email}</p>
+      {/* ── Footer ── */}
+      <div className="p-3">
+        <div
+          className="rounded-2xl p-3"
+          style={{
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.07)',
+          }}
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+              style={{ background: 'linear-gradient(135deg, #ff6b00, #ff8a33)' }}
+            >
+              {userInitial}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-xs font-medium text-white">{email}</p>
+              <p className="text-[10px] text-zinc-500">Administrator</p>
+            </div>
+          </div>
+          <Link
+            href="/"
+            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white"
+          >
+            <Home className="h-3.5 w-3.5" />
+            Back to Storefront
+          </Link>
           <button
             onClick={handleSignOut}
             disabled={signingOut}
-            className="mt-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
+            className="mt-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium text-zinc-400 transition-all hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
           >
-            <LogOut className="h-3 w-3" />
+            <LogOut className="h-3.5 w-3.5" />
             {signingOut ? l('signingOut') : l('signOut')}
           </button>
         </div>
@@ -117,106 +228,173 @@ export default function AdminShell({
   )
 
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${plusJakartaSans.variable} ${outfit.variable}`}
+    >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <link rel="preconnect" href="https://api.cloudinary.com" />
         <link rel="dns-prefetch" href="https://api.cloudinary.com" />
       </head>
-      <body className="bg-zinc-950 text-white antialiased">
+      <body
+        className="antialiased font-sans"
+        style={{ background: '#080808', color: '#fff' }}
+      >
         <LazyMotion features={domMax}>
-        <div className="flex h-screen overflow-hidden">
-          {/* Desktop Sidebar */}
-          <aside className="hidden w-64 shrink-0 border-r border-white/10 bg-zinc-900 lg:flex lg:flex-col">
-            <SidebarContent />
-          </aside>
+          <div className="flex h-screen overflow-hidden">
 
-          {/* Mobile Sidebar Overlay */}
-          <AnimatePresence>
-            {mobileOpen && (
-              <>
-                <m.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-                  onClick={() => setMobileOpen(false)}
-                />
-                <m.aside
-                  initial={{ x: -280 }}
-                  animate={{ x: 0 }}
-                  exit={{ x: -280 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                  className="fixed inset-y-0 left-0 z-50 w-64 border-r border-white/10 bg-zinc-900 lg:hidden"
-                >
-                  <SidebarContent />
-                </m.aside>
-              </>
-            )}
-          </AnimatePresence>
+            {/* ── Desktop Sidebar ── */}
+            <aside
+              className="hidden w-64 shrink-0 lg:flex lg:flex-col"
+              style={{
+                background: '#0f0f0f',
+                borderRight: '1px solid rgba(255,255,255,0.07)',
+              }}
+            >
+              <SidebarContent />
+            </aside>
 
-          {/* Main content */}
-          <div className="flex flex-1 flex-col overflow-hidden">
-            {/* Top Header */}
-            <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-zinc-900/80 px-4 backdrop-blur-sm lg:px-6">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setMobileOpen(true)}
-                  className="rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-white lg:hidden"
-                >
-                  <Menu className="h-5 w-5" />
-                </button>
-                <h1 className="text-base font-semibold text-white">{pageTitle}</h1>
-              </div>
+            {/* ── Mobile overlay ── */}
+            <AnimatePresence>
+              {mobileOpen && (
+                <>
+                  <m.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+                    onClick={() => setMobileOpen(false)}
+                  />
+                  <m.aside
+                    initial={{ x: -280 }}
+                    animate={{ x: 0 }}
+                    exit={{ x: -280 }}
+                    transition={{ type: 'spring', damping: 28, stiffness: 220 }}
+                    className="fixed inset-y-0 left-0 z-50 w-64 lg:hidden"
+                    style={{
+                      background: '#0f0f0f',
+                      borderRight: '1px solid rgba(255,255,255,0.07)',
+                    }}
+                  >
+                    <SidebarContent />
+                  </m.aside>
+                </>
+              )}
+            </AnimatePresence>
 
-              <div className="hidden items-center gap-3 sm:flex">
-                <button
-                  type="button"
-                  onClick={toggleLang}
-                  className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-sm font-medium text-zinc-400 transition-colors hover:border-orange-500/50 hover:text-orange-400"
-                >
-                  <Languages className="h-3.5 w-3.5" />
-                  {l('langToggle')}
-                </button>
-                <span className="text-sm text-zinc-500 truncate max-w-[200px]">{email}</span>
-                <button
-                  onClick={handleSignOut}
-                  disabled={signingOut}
-                  className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-sm font-medium text-zinc-400 transition-colors hover:border-red-500/50 hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                  {signingOut ? l('signingOut') : l('signOut')}
-                </button>
-              </div>
-            </header>
+            {/* ── Main area ── */}
+            <div className="flex flex-1 flex-col overflow-hidden">
 
-            {/* Page content */}
-            <main className="flex-1 overflow-y-auto">
-              <m.div
-                key={pathname}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="h-full"
+              {/* Top bar */}
+              <header
+                className="flex h-16 shrink-0 items-center justify-between px-4 lg:px-6"
+                style={{
+                  background: 'rgba(15,15,15,0.85)',
+                  borderBottom: '1px solid rgba(255,255,255,0.07)',
+                  backdropFilter: 'blur(12px)',
+                }}
               >
-                {children}
-              </m.div>
-            </main>
-          </div>
-        </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setMobileOpen(true)}
+                    className="rounded-xl p-2 text-zinc-400 transition-colors hover:bg-white/5 hover:text-white lg:hidden"
+                  >
+                    <Menu className="h-5 w-5" />
+                  </button>
+                  <div>
+                    <h1
+                      className="text-sm font-semibold text-white leading-none"
+                      style={{ fontFamily: 'var(--font-display, Outfit, sans-serif)' }}
+                    >
+                      {pageTitle}
+                    </h1>
+                    <p className="text-[10px] text-zinc-600 mt-0.5">Scooty DO Admin</p>
+                  </div>
+                </div>
 
-        <Toaster
-          theme="dark"
-          position="bottom-right"
-          toastOptions={{
-            style: { background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', color: '#fff' },
-          }}
-        />
+                <div className="hidden items-center gap-2 sm:flex">
+                  {/* Lang toggle */}
+                  <button
+                    type="button"
+                    onClick={toggleLang}
+                    className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white"
+                    style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+                  >
+                    <Globe className="h-3.5 w-3.5" />
+                    {l('langToggle')}
+                  </button>
+
+                  {/* Go to site */}
+                  <Link
+                    href="/"
+                    target="_blank"
+                    className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white"
+                    style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+                  >
+                    <Home className="h-3.5 w-3.5" />
+                    Back to Storefront
+                  </Link>
+
+                  {/* User avatar */}
+                  <div
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white"
+                    style={{ background: 'linear-gradient(135deg, #ff6b00, #ff8a33)' }}
+                    title={email}
+                  >
+                    {userInitial}
+                  </div>
+
+                  {/* Sign out */}
+                  <button
+                    onClick={handleSignOut}
+                    disabled={signingOut}
+                    className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-all hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
+                    style={{
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      color: 'rgb(161,161,170)',
+                    }}
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    {signingOut ? l('signingOut') : l('signOut')}
+                  </button>
+                </div>
+              </header>
+
+              {/* Page content */}
+              <main
+                className="flex-1 overflow-y-auto"
+                style={{ background: '#080808' }}
+              >
+                <m.div
+                  key={pathname}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.22, ease: 'easeOut' }}
+                  className="h-full"
+                >
+                  {children}
+                </m.div>
+              </main>
+            </div>
+          </div>
+
+          <Toaster
+            theme="dark"
+            position="bottom-right"
+            toastOptions={{
+              style: {
+                background: '#141414',
+                border: '1px solid rgba(255,255,255,0.1)',
+                color: '#fff',
+                fontFamily: 'var(--font-sans, Plus Jakarta Sans, sans-serif)',
+              },
+            }}
+          />
         </LazyMotion>
       </body>
     </html>
   )
 }
-

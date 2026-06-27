@@ -1,4 +1,4 @@
-import { Inter, Space_Grotesk, Cairo } from 'next/font/google'
+import { Outfit, Plus_Jakarta_Sans, Cairo } from 'next/font/google'
 import '@/app/globals.css'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
@@ -12,11 +12,16 @@ import { createClient } from '@/lib/supabase/server'
 import { ScrollBehavior } from '@/components/ScrollBehavior'
 import { PageTransition } from '@/components/motion/PageTransition'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
-const spaceGrotesk = Space_Grotesk({
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  weight: ['300', '400', '500', '600', '700', '800'],
+  display: 'swap',
+})
+const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-display',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   display: 'swap',
 })
 const cairo = Cairo({ subsets: ['arabic'], variable: '--font-arabic', display: 'swap' })
@@ -53,6 +58,12 @@ export default async function LocaleLayout({
       'announcement_text_ar',
       'announcement_bg_color',
       'whatsapp_number',
+      'ticker_segment_2_en',
+      'ticker_segment_2_ar',
+      'ticker_segment_3_en',
+      'ticker_segment_3_ar',
+      'ticker_segment_4_en',
+      'ticker_segment_4_ar',
     ])
 
   const annMap = Object.fromEntries(
@@ -73,7 +84,7 @@ export default async function LocaleLayout({
       lang={locale}
       dir={dir}
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${cairo.variable} ${locale === 'ar' ? 'font-arabic' : ''}`}
+      className={`${plusJakartaSans.variable} ${outfit.variable} ${cairo.variable} ${locale === 'ar' ? 'font-arabic' : ''}`}
     >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
@@ -89,6 +100,9 @@ export default async function LocaleLayout({
             announcementVisible={announcementVisible}
             announcementText={announcementText}
             announcementBg={announcementBg}
+            tickerSegment2={locale === 'ar' ? annMap.ticker_segment_2_ar : annMap.ticker_segment_2_en}
+            tickerSegment3={locale === 'ar' ? annMap.ticker_segment_3_ar : annMap.ticker_segment_3_en}
+            tickerSegment4={locale === 'ar' ? annMap.ticker_segment_4_ar : annMap.ticker_segment_4_en}
           />
           <main className="flex-1">
             <PageTransition>{children}</PageTransition>

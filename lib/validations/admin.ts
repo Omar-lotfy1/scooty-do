@@ -91,6 +91,13 @@ export const announcementSchema = z.object({
   announcement_text_en: z.string(),
   announcement_text_ar: z.string(),
   announcement_bg_color: z.enum(['orange', 'black']),
+  // Editable ticker segments
+  ticker_segment_2_en: z.string(),
+  ticker_segment_2_ar: z.string(),
+  ticker_segment_3_en: z.string(),
+  ticker_segment_3_ar: z.string(),
+  ticker_segment_4_en: z.string(),
+  ticker_segment_4_ar: z.string(),
 })
 export type AnnouncementFormValues = z.infer<typeof announcementSchema>
 

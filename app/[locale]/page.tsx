@@ -247,7 +247,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             category: badgeLabel(p.badge_status, tProducts),
             price: p.price ?? 0,
             stock: p.stock_count ?? 0,
-            tagline: p[localizedDesc] ?? '',
+            tagline: (() => {
+              const raw = (p[localizedDesc] ?? '') as string
+              return raw.length > 80 ? raw.slice(0, 80).trimEnd() + '…' : raw
+            })(),
             image: {
               src: p.images && p.images.length > 0 ? p.images[0] : '/images/scooter-3.png',
               alt: p[localizedName] ?? '',
@@ -257,14 +260,21 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             specs: [
               {
                 label: tProducts('speed'),
-                value: p.key_spec_en?.split(',')[0]?.trim() || '25 km/h',
+                value: (() => {
+                  const raw = (p.key_spec_en?.split(',')[0] ?? '').trim()
+                  // Extract a pattern like "25 km/h" or "45km/h" from any long string
+                  const match = raw.match(/(\d+(?:\.\d+)?\s*km\/h)/i)
+                  return match ? match[1] : raw.slice(0, 20) || '25 km/h'
+                })(),
               },
               {
                 label: tProducts('battery'),
-                value:
-                  locale === 'ar'
-                    ? p.key_spec_ar?.split(',')[1]?.trim() || 'بطارية طويلة المدى'
-                    : p.key_spec_en?.split(',')[1]?.trim() || 'Long-range',
+                value: (() => {
+                  const raw = locale === 'ar'
+                    ? (p.key_spec_ar?.split(',')[1] ?? '').trim()
+                    : (p.key_spec_en?.split(',')[1] ?? '').trim()
+                  return raw.slice(0, 24) || (locale === 'ar' ? 'بطارية طويلة المدى' : 'Long-range')
+                })(),
               },
             ],
             primaryCta: { label: tProducts('reserveNow'), href: `/${locale}/shop/${p.slug}` },

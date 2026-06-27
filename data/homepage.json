@@ -88,18 +88,6 @@
         "description": "Strong construction supports up to 100 KG while staying sleek and modern.",
         "stat": "100 KG support",
         "icon": "shield"
-      },
-      {
-        "title": "Safe stable braking",
-        "description": "Reliable control creates confidence for new riders and experienced commuters alike.",
-        "stat": "Confidence in traffic",
-        "icon": "brake"
-      },
-      {
-        "title": "Modern sporty aesthetic",
-        "description": "Premium lines, futuristic detailing, and standout product styling for lifestyle buyers.",
-        "stat": "Trend-forward design",
-        "icon": "sparkles"
       }
     ]
   },
