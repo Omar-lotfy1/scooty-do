@@ -1,4 +1,4 @@
-import { Outfit, Plus_Jakarta_Sans, Cairo } from 'next/font/google'
+import { Outfit, Plus_Jakarta_Sans, Tajawal } from 'next/font/google'
 import '@/app/globals.css'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
@@ -24,7 +24,12 @@ const outfit = Outfit({
   weight: ['400', '500', '600', '700', '800', '900'],
   display: 'swap',
 })
-const cairo = Cairo({ subsets: ['arabic'], variable: '--font-arabic', display: 'swap' })
+const tajawal = Tajawal({
+  subsets: ['arabic'],
+  variable: '--font-arabic',
+  weight: ['300', '400', '500', '700', '800', '900'],
+  display: 'swap',
+})
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -84,7 +89,7 @@ export default async function LocaleLayout({
       lang={locale}
       dir={dir}
       data-scroll-behavior="smooth"
-      className={`${plusJakartaSans.variable} ${outfit.variable} ${cairo.variable} ${locale === 'ar' ? 'font-arabic' : ''}`}
+      className={`${plusJakartaSans.variable} ${outfit.variable} ${tajawal.variable} ${locale === 'ar' ? 'font-arabic' : ''}`}
     >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />

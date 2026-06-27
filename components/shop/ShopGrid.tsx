@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import { useTranslations } from 'next-intl'
+import { m } from 'framer-motion'
 
 type Product = Database['public']['Tables']['products']['Row']
 
@@ -51,19 +52,32 @@ export function ShopGrid({ initialProducts }: { initialProducts: Product[] }) {
     <div>
       {/* Category Filters */}
       <div className="mb-6 flex flex-wrap gap-3 rtl:flex-row-reverse">
-        {categories.map((cat) => (
-          <button
-            key={cat.key}
-            onClick={() => setActiveCategory(cat.key)}
-            className={`rounded-full border px-6 py-2.5 text-sm font-medium transition-all duration-300 ${
-              activeCategory === cat.key
-                ? 'border-hp-primary bg-hp-primary text-white shadow-hp-glow'
-                : 'border-slate-200 bg-white text-slate-500 hover:border-hp-primary/30 hover:text-slate-900'
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
+        {categories.map((cat) => {
+          const active = activeCategory === cat.key
+          return (
+            <button
+              key={cat.key}
+              onClick={() => setActiveCategory(cat.key)}
+              className="relative rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 focus:outline-none cursor-pointer"
+              style={{
+                color: active ? '#fff' : '#6b7280',
+                border: '1px solid transparent',
+              }}
+            >
+              {active && (
+                <m.div
+                  layoutId="activeCategoryPill"
+                  className="absolute inset-0 -z-10 rounded-full bg-hp-primary shadow-hp-glow"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
+              {!active && (
+                <div className="absolute inset-0 -z-10 rounded-full border border-slate-200 bg-white hover:border-hp-primary/30 transition-colors" />
+              )}
+              {cat.label}
+            </button>
+          )
+        })}
       </div>
 
       {/* Filters Bar */}

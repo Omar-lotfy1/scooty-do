@@ -46,11 +46,11 @@ export function EnvironmentalImpact() {
           
           {/* Left Text Content */}
           <m.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-2xl opacity-0 -translate-x-[50px]"
+            className="max-w-2xl opacity-0"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-hp-primary/10 text-hp-primary">

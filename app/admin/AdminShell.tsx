@@ -24,7 +24,7 @@ import {
 } from 'lucide-react'
 import { useAdminLang } from '@/lib/admin-lang'
 import { adminLabel, type AdminLabelKey } from '@/lib/admin-labels'
-import { Outfit, Plus_Jakarta_Sans } from 'next/font/google'
+import { Outfit, Plus_Jakarta_Sans, Tajawal } from 'next/font/google'
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -36,6 +36,12 @@ const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-display',
   weight: ['400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+})
+const tajawal = Tajawal({
+  subsets: ['arabic'],
+  variable: '--font-arabic',
+  weight: ['300', '400', '500', '700', '800', '900'],
   display: 'swap',
 })
 
@@ -229,8 +235,9 @@ export default function AdminShell({
 
   return (
     <html
-      lang="en"
-      className={`${plusJakartaSans.variable} ${outfit.variable}`}
+      lang={lang}
+      dir={lang === 'ar' ? 'rtl' : 'ltr'}
+      className={`${plusJakartaSans.variable} ${outfit.variable} ${tajawal.variable}`}
     >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
@@ -239,7 +246,7 @@ export default function AdminShell({
         <link rel="dns-prefetch" href="https://api.cloudinary.com" />
       </head>
       <body
-        className="antialiased font-sans"
+        className={`antialiased font-sans ${lang === 'ar' ? 'font-arabic' : ''}`}
         style={{ background: '#080808', color: '#fff' }}
       >
         <LazyMotion features={domMax}>

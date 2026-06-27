@@ -11,6 +11,7 @@ import { productSchema, type ProductFormValues } from '@/lib/validations/admin'
 import { Plus, Edit, Trash2, X, Upload, Loader2, Package } from 'lucide-react'
 import { useAdminLang } from '@/lib/admin-lang'
 import { adminLabel } from '@/lib/admin-labels'
+import { cn } from '@/lib/utils'
 
 type Product = {
   id: string
@@ -30,6 +31,51 @@ type Product = {
 
 function slugify(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
+function parseKeySpecString(specStr: string | null, isRtl: boolean) {
+  const defaultValues = {
+    speed: isRtl ? '25 كم/ساعة' : '25 km/h',
+    range: isRtl ? 'لحد 45 كم' : 'Up to 45 km',
+    motor: isRtl ? '300 واط' : '300W',
+    load: isRtl ? '100 كجم' : '100 kg',
+    braking: isRtl ? 'نظام فرامل مزدوج' : 'Dual Braking',
+    design: isRtl ? 'تصميم بيتطوي' : 'Foldable Design',
+  }
+
+  if (!specStr) return defaultValues
+
+  const specItems = (specStr.includes(',')
+    ? specStr.split(',')
+    : specStr.split(/(?=(?:Range:|Motor|\d+W|Foldable|Dual|\d+(?:\.\d+)?\"|LED|Bluetooth|Max Load:|Speed:|مدى|موتور|تصميم|نظام|كاوتش|شاشة|بيدعم|يستحمل))/i)
+  ).map(s => s.trim()).filter(Boolean)
+
+  const res = { ...defaultValues }
+
+  specItems.forEach((spec) => {
+    const cleanSpec = spec.toLowerCase()
+    if (cleanSpec.includes('speed') || cleanSpec.includes('سرعة')) {
+      res.speed = spec.replace(/^(Top Speed:|سرعة لحد|سرعة|:\s*)/gi, '').trim()
+    } else if (cleanSpec.includes('range') || cleanSpec.includes('مدى')) {
+      res.range = spec.replace(/^(Range:|مدى قيادة لحد|مدى|:\s*)/gi, '').trim()
+    } else if (cleanSpec.includes('motor') || cleanSpec.includes('موتور') || spec.match(/\d+W\b/i)) {
+      res.motor = spec.replace(/^(Motor:|موتور|:\s*)/gi, '').trim()
+    } else if (cleanSpec.includes('load') || cleanSpec.includes('وزن') || cleanSpec.includes('يستحمل')) {
+      res.load = spec.replace(/^(Max Load:|يستحمل وزن لحد|يستحمل|:\s*)/gi, '').trim()
+    } else if (cleanSpec.includes('braking') || cleanSpec.includes('فرامل')) {
+      res.braking = spec.replace(/^(Dual Braking System|نظام فرامل مزدوج|فرامل|:\s*)/gi, '').trim()
+    } else if (cleanSpec.includes('design') || cleanSpec.includes('تصميم') || cleanSpec.includes('يتطوي')) {
+      res.design = spec.replace(/^(Foldable Design|تصميم بيتطوي|بيتطوي|:\s*)/gi, '').trim()
+    }
+  })
+
+  // Strip leading/trailing colons
+  Object.keys(res).forEach((k) => {
+    const key = k as keyof typeof res
+    res[key] = res[key].replace(/^[:\s\-]+|[:\s\-]+$/g, '').trim()
+  })
+
+  return res
 }
 
 function badgeStyle(status: string | null) {
@@ -68,12 +114,57 @@ function ProductModal({
   const [images, setImages] = useState<string[]>(product?.images ?? [])
   const [publicIds, setPublicIds] = useState<string[]>(product?.image_public_ids ?? [])
   const [uploading, setUploading] = useState(false)
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null)
+
+  const handleDragStart = (idx: number) => {
+    setDraggedIdx(idx)
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
+
+  const handleDrop = (idx: number) => {
+    if (draggedIdx === null || draggedIdx === idx) return
+    const reorderedImages = [...images]
+    const reorderedPublicIds = [...publicIds]
+
+    const [movedImage] = reorderedImages.splice(draggedIdx, 1)
+    const [movedPublicId] = reorderedPublicIds.splice(draggedIdx, 1)
+
+    reorderedImages.splice(idx, 0, movedImage)
+    reorderedPublicIds.splice(idx, 0, movedPublicId)
+
+    setImages(reorderedImages)
+    setPublicIds(reorderedPublicIds)
+    setDraggedIdx(null)
+    toast.success('Images reordered (drag-and-drop)')
+  }
+
+  const parsedSpecsEn = parseKeySpecString(product?.key_spec_en ?? null, false)
+  const parsedSpecsAr = parseKeySpecString(product?.key_spec_ar ?? null, true)
+
+  interface ExtendedProductFormValues extends ProductFormValues {
+    spec_speed_en?: string
+    spec_speed_ar?: string
+    spec_range_en?: string
+    spec_range_ar?: string
+    spec_motor_en?: string
+    spec_motor_ar?: string
+    spec_load_en?: string
+    spec_load_ar?: string
+    spec_braking_en?: string
+    spec_braking_ar?: string
+    spec_design_en?: string
+    spec_design_ar?: string
+  }
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
-  } = useForm<ProductFormValues>({
+  } = useForm<ExtendedProductFormValues>({
     resolver: zodResolver(productSchema) as any,
     defaultValues: {
       name_en: product?.name_en ?? '',
@@ -84,7 +175,20 @@ function ProductModal({
       description_ar: product?.description_ar ?? '',
       key_spec_en: product?.key_spec_en ?? '',
       key_spec_ar: product?.key_spec_ar ?? '',
-      badge_status: (product?.badge_status as ProductFormValues['badge_status']) ?? 'In Stock',
+      // Structured specs
+      spec_speed_en: parsedSpecsEn.speed,
+      spec_speed_ar: parsedSpecsAr.speed,
+      spec_range_en: parsedSpecsEn.range,
+      spec_range_ar: parsedSpecsAr.range,
+      spec_motor_en: parsedSpecsEn.motor,
+      spec_motor_ar: parsedSpecsAr.motor,
+      spec_load_en: parsedSpecsEn.load,
+      spec_load_ar: parsedSpecsAr.load,
+      spec_braking_en: parsedSpecsEn.braking,
+      spec_braking_ar: parsedSpecsAr.braking,
+      spec_design_en: parsedSpecsEn.design,
+      spec_design_ar: parsedSpecsAr.design,
+      badge_status: (product?.badge_status as any) ?? 'In Stock',
       images: product?.images ?? [],
       image_public_ids: product?.image_public_ids ?? [],
     },
@@ -139,7 +243,26 @@ function ProductModal({
     toast.success('Image deleted')
   }
 
-  const onSubmit = async (values: ProductFormValues) => {
+  const onSubmit = async (values: any) => {
+    // Compile structured specs into standard comma-separated key specs
+    const key_spec_en = [
+      `Top Speed: ${values.spec_speed_en || '25 km/h'}`,
+      `Range: ${values.spec_range_en || 'Up to 45 km'}`,
+      `Motor: ${values.spec_motor_en || '300W'}`,
+      `Max Load: ${values.spec_load_en || '100 kg'}`,
+      `Braking: ${values.spec_braking_en || 'Dual Braking'}`,
+      `Design: ${values.spec_design_en || 'Foldable Design'}`,
+    ].join(', ')
+
+    const key_spec_ar = [
+      `سرعة لحد ${values.spec_speed_ar || '25 كم/ساعة'}`,
+      `مدى قيادة لحد ${values.spec_range_ar || '45 كم'}`,
+      `موتور ${values.spec_motor_ar || '300 واط'}`,
+      `يستحمل وزن لحد ${values.spec_load_ar || '100 كجم'}`,
+      `فرامل ${values.spec_braking_ar || 'نظام فرامل مزدوج'}`,
+      `تصميم ${values.spec_design_ar || 'تصميم بيتطوي'}`,
+    ].join(', ')
+
     const slug = product?.slug ?? slugify(values.name_en)
     const payload = {
       slug,
@@ -149,8 +272,8 @@ function ProductModal({
       stock_count: values.stock_count,
       description_en: values.description_en,
       description_ar: values.description_ar,
-      key_spec_en: values.key_spec_en,
-      key_spec_ar: values.key_spec_ar,
+      key_spec_en,
+      key_spec_ar,
       badge_status: values.badge_status,
       images,
       image_public_ids: publicIds,
@@ -245,20 +368,98 @@ function ProductModal({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div>
-                <label className={labelCls}>Key Spec (English)</label>
-                <input {...register('key_spec_en')} className={fieldCls} placeholder="30km range, 25km/h max" />
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 space-y-6">
+              <div className="flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded bg-orange-500/20 text-orange-500 font-bold text-xs">S</span>
+                <h4 className="text-sm font-semibold text-white">Product Specifications</h4>
               </div>
-              <div>
-                <label className={labelCls}>Key Spec (Arabic)</label>
-                <input {...register('key_spec_ar')} className={fieldCls} dir="rtl" placeholder="مدى 30 كم، سرعة 25 كم/س" />
+
+              {/* Speed & Range */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className={labelCls}>Top Speed (EN)</label>
+                    <input {...register('spec_speed_en')} className={fieldCls} placeholder="e.g. 25 km/h" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>السرعة القصوى (AR)</label>
+                    <input {...register('spec_speed_ar')} className={fieldCls} dir="rtl" placeholder="مثال: 25 كم/ساعة" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className={labelCls}>Range / Battery (EN)</label>
+                    <input {...register('spec_range_en')} className={fieldCls} placeholder="e.g. Up to 45 km" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>المدى (AR)</label>
+                    <input {...register('spec_range_ar')} className={fieldCls} dir="rtl" placeholder="مثال: لحد 45 كم" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Motor & Max Load */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className={labelCls}>Motor Power (EN)</label>
+                    <input {...register('spec_motor_en')} className={fieldCls} placeholder="e.g. 300W" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>المحرك (AR)</label>
+                    <input {...register('spec_motor_ar')} className={fieldCls} dir="rtl" placeholder="مثال: 300 واط" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className={labelCls}>Max Load (EN)</label>
+                    <input {...register('spec_load_en')} className={fieldCls} placeholder="e.g. 100 kg" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>الحمل الأقصى (AR)</label>
+                    <input {...register('spec_load_ar')} className={fieldCls} dir="rtl" placeholder="مثال: 100 كجم" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Brakes & Design */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className={labelCls}>Braking System (EN)</label>
+                    <input {...register('spec_braking_en')} className={fieldCls} placeholder="e.g. Dual Braking" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>نظام الفرامل (AR)</label>
+                    <input {...register('spec_braking_ar')} className={fieldCls} dir="rtl" placeholder="مثال: نظام فرامل مزدوج" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className={labelCls}>Design/Folding (EN)</label>
+                    <input {...register('spec_design_en')} className={fieldCls} placeholder="e.g. Foldable Design" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>التصميم (AR)</label>
+                    <input {...register('spec_design_ar')} className={fieldCls} dir="rtl" placeholder="مثال: تصميم بيتطوي" />
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Image upload */}
             <div>
-              <label className={labelCls}>Product Images</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className={labelCls}>Product Images</label>
+                {images.length > 1 && (
+                  <span className="text-[10px] text-zinc-500 font-medium">
+                    Drag and drop images to reorder. The first image will be the primary cover.
+                  </span>
+                )}
+              </div>
               <CldUploadButton
                 uploadPreset="scooty do"
                 options={{
@@ -275,26 +476,42 @@ function ProductModal({
                   setUploading(false)
                   toast.error('Upload failed')
                 }}
-                className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-white/20 px-4 py-3 text-sm text-zinc-400 hover:border-orange-500/50 hover:text-orange-400 transition-colors"
+                className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-white/20 px-4 py-3 text-sm text-zinc-400 hover:border-orange-500/50 hover:text-orange-400 transition-colors w-full"
               >
                 <Upload className="h-4 w-4 shrink-0" />
                 {uploading ? 'Uploading…' : 'Upload images'}
               </CldUploadButton>
 
               {images.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-3">
+                <div className="mt-4 flex flex-wrap gap-3">
                   {images.map((url, idx) => (
-                    <div key={idx} className="group relative h-20 w-20 overflow-hidden rounded-xl border border-white/10">
+                    <div
+                      key={idx}
+                      draggable
+                      onDragStart={() => handleDragStart(idx)}
+                      onDragOver={handleDragOver}
+                      onDrop={() => handleDrop(idx)}
+                      className={cn(
+                        "group relative h-20 w-20 overflow-hidden rounded-xl border transition-all cursor-move active:scale-95 active:rotate-2",
+                        draggedIdx === idx ? "border-orange-500 opacity-40 scale-90" : "border-white/10 hover:border-white/30"
+                      )}
+                      title="Drag to reorder"
+                    >
                       {publicIds[idx] ? (
                         <CldImage
                           src={publicIds[idx]}
                           width={160}
                           height={160}
                           alt={`Product image ${idx + 1}`}
-                          className="object-cover h-full w-full"
+                          className="object-cover h-full w-full pointer-events-none"
                         />
                       ) : (
-                        <img src={url} alt={`Product image ${idx + 1}`} className="h-full w-full object-cover" />
+                        <img src={url} alt={`Product image ${idx + 1}`} className="h-full w-full object-cover pointer-events-none" />
+                      )}
+                      {idx === 0 && (
+                        <span className="absolute top-1 left-1 bg-orange-500 text-[8px] font-black uppercase text-white px-1 py-0.5 rounded">
+                          Cover
+                        </span>
                       )}
                       <button
                         type="button"
