@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { CldImage, CldUploadButton } from 'next-cloudinary'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
@@ -10,6 +10,8 @@ type LifestyleImage = { url: string; public_id: string }
 
 export default function LifestyleClient({ initialImages }: { initialImages: LifestyleImage[] }) {
   const [images, setImages] = useState<LifestyleImage[]>(initialImages)
+  const imagesRef = useRef<LifestyleImage[]>(initialImages)
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [uploading, setUploading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [deletingIdx, setDeletingIdx] = useState<number | null>(null)
@@ -31,15 +33,18 @@ export default function LifestyleClient({ initialImages }: { initialImages: Life
       public_id: info.public_id,
     }))
 
-    const combined = [...images, ...newImages].slice(0, MAX_IMAGES)
+    const combined = [...imagesRef.current, ...newImages].slice(0, MAX_IMAGES)
+    imagesRef.current = combined
     setImages(combined)
-    await saveToDatabase(combined)
+    saveToDatabase(combined)
     toast.success(`${newImages.length} image(s) added`)
   }
 
   const removeImage = async (idx: number) => {
     setDeletingIdx(idx)
-    const img = images[idx]
+    const currentList = imagesRef.current
+    const img = currentList[idx]
+    if (!img) return
     
     try {
       // Delete from Cloudinary
@@ -54,9 +59,10 @@ export default function LifestyleClient({ initialImages }: { initialImages: Life
       }
 
       // Update state and DB
-      const newImages = images.filter((_, i) => i !== idx)
+      const newImages = currentList.filter((_, i) => i !== idx)
+      imagesRef.current = newImages
       setImages(newImages)
-      await saveToDatabase(newImages)
+      saveToDatabase(newImages)
       toast.success('Image deleted')
     } catch (err: any) {
       toast.error(err.message || 'Failed to delete')
@@ -66,26 +72,32 @@ export default function LifestyleClient({ initialImages }: { initialImages: Life
   }
 
   const saveToDatabase = async (currentImages: LifestyleImage[]) => {
-    setSaving(true)
-    try {
-      // Upsert the setting
-      const { error } = await supabase.from('site_settings').upsert({
-        key: 'lifestyle_images',
-        value: currentImages,
-      })
-      if (error) throw error
-
-      // Revalidate the homepage so changes appear immediately
-      await fetch('/api/admin/revalidate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scope: 'homepage' }),
-      })
-    } catch (err: any) {
-      toast.error('Failed to save to database')
-    } finally {
-      setSaving(false)
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current)
     }
+
+    setSaving(true)
+    saveTimeoutRef.current = setTimeout(async () => {
+      try {
+        const { error } = await supabase.from('site_settings').upsert({
+          key: 'lifestyle_images',
+          value: currentImages,
+        })
+        if (error) throw error
+
+        // Revalidate the homepage so changes appear immediately
+        await fetch('/api/admin/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ scope: 'homepage' }),
+        })
+      } catch (err: any) {
+        toast.error('Failed to save to database')
+      } finally {
+        setSaving(false)
+        saveTimeoutRef.current = null
+      }
+    }, 500)
   }
 
   return (
