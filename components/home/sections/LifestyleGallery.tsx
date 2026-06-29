@@ -19,8 +19,17 @@ export function LifestyleGallery({ images }: { images?: { url: string; public_id
 
   const activeImages = images && images.length > 0 ? images : defaultImages;
   
+  // Ensure we have a minimum number of base items to span the screen width and loop seamlessly
+  let baseImages = [...activeImages];
+  while (baseImages.length < 8) {
+    baseImages = [...baseImages, ...activeImages];
+  }
+
   // We triple the array so there's never a blank space on large screens during the loop
-  const duplicatedImages = [...activeImages, ...activeImages, ...activeImages];
+  const duplicatedImages = [...baseImages, ...baseImages, ...baseImages];
+  
+  // Dynamically compute the duration (approx 5.8s per base item) to maintain a constant speed
+  const duration = Math.round(baseImages.length * 5.83);
 
   return (
     <section className="py-24 lg:py-32 overflow-hidden bg-transparent relative z-10">
@@ -51,7 +60,10 @@ export function LifestyleGallery({ images }: { images?: { url: string; public_id
 
         <div
           className="flex whitespace-nowrap gap-6 px-3 animate-marquee-scroll"
-          style={{ animationPlayState: isHovered ? 'paused' : 'running' }}
+          style={{ 
+            animationPlayState: isHovered ? 'paused' : 'running',
+            animationDuration: `${duration}s`
+          }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >

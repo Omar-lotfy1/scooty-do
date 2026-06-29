@@ -183,33 +183,54 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   ])
 
   const liveProducts = (productsRes.data ?? []) as unknown as Product[]
-  const settings = Object.fromEntries(
-    (settingsRes.data ?? []).map((r) => [r.key, settingStr(r.value)])
+
+  const rawSettings = Object.fromEntries(
+    (settingsRes.data ?? []).map((r) => [r.key, r.value])
   )
+  const stringSettings: Record<string, string> = {}
+  for (const [key, val] of Object.entries(rawSettings)) {
+    if (val !== null && typeof val !== 'object') {
+      stringSettings[key] = settingStr(val)
+    } else if (val === null) {
+      stringSettings[key] = ''
+    }
+  }
+
+  const lifestyleImagesVal = rawSettings.lifestyle_images
+  let lifestyleImages = null
+  if (lifestyleImagesVal) {
+    try {
+      lifestyleImages = typeof lifestyleImagesVal === 'string'
+        ? JSON.parse(lifestyleImagesVal)
+        : lifestyleImagesVal
+    } catch (e) {
+      console.error('Failed to parse lifestyle_images', e)
+    }
+  }
 
   const localizedName = locale === 'ar' ? 'name_ar' : 'name_en'
   const localizedDesc = locale === 'ar' ? 'description_ar' : 'description_en'
 
   const heroHeadline =
     locale === 'ar'
-      ? settings.hero_headline_ar || hp.hero.title
-      : settings.hero_headline_en || hp.hero.title
+      ? stringSettings.hero_headline_ar || hp.hero.title
+      : stringSettings.hero_headline_en || hp.hero.title
 
   const heroSub =
     locale === 'ar'
-      ? settings.hero_subheadline_ar || hp.hero.description
-      : settings.hero_subheadline_en || hp.hero.description
+      ? stringSettings.hero_subheadline_ar || hp.hero.description
+      : stringSettings.hero_subheadline_en || hp.hero.description
 
   const heroCta =
     locale === 'ar'
-      ? settings.hero_cta_ar || hp.hero.primaryCta.label
-      : settings.hero_cta_en || hp.hero.primaryCta.label
+      ? stringSettings.hero_cta_ar || hp.hero.primaryCta.label
+      : stringSettings.hero_cta_en || hp.hero.primaryCta.label
 
-  const heroImage = settings.hero_image_url || hp.hero.image.src
+  const heroImage = stringSettings.hero_image_url || hp.hero.image.src
 
   const statsOverride = [
     {
-      value: settings.stats_models || hp.hero.stats[0]?.value || '',
+      value: stringSettings.stats_models || hp.hero.stats[0]?.value || '',
       label: tHero('statRange'),
     },
     {
@@ -217,7 +238,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       label: tHero('statPayload'),
     },
     {
-      value: settings.stats_total_stock || hp.hero.stats[2]?.value || '',
+      value: stringSettings.stats_total_stock || hp.hero.stats[2]?.value || '',
       label: tHero('statStock'),
     },
   ]
@@ -232,7 +253,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     },
   }
 
-  const featuresContent = buildFeaturesContent(settings, locale, hp)
+  const featuresContent = buildFeaturesContent(stringSettings, locale, hp)
 
   const productContent: ProductSectionContent =
     liveProducts.length > 0
@@ -299,7 +320,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         subOverride={heroSub}
         ctaOverride={heroCta}
         imageOverride={heroImage}
-        imagePublicIdOverride={settings.hero_image_public_id}
+        imagePublicIdOverride={stringSettings.hero_image_public_id}
         statsOverride={statsOverride}
       />
       <TrustStrip items={hp.trustStrip} />
@@ -312,7 +333,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <EnvironmentalImpact />
       </Suspense>
       <Suspense fallback={<LifestyleSkeleton />}>
-        <LifestyleGallery images={settings.lifestyle_images ? JSON.parse(settings.lifestyle_images) : null} />
+        <LifestyleGallery images={lifestyleImages} />
       </Suspense>
     </div>
   )
